@@ -8,6 +8,7 @@ local vertexFormat = {
   {"VertexPosition", "float", 3},
   {"VertexTexCoord", "float", 2},
   {"VertexColor", "byte", 4},
+  {"VertexNormal", "float", 4}
 }
 
 local verts = {
@@ -58,6 +59,8 @@ function Cube.new(position, shader)
   local self = setmetatable({}, Cube)
   self.mesh = love.graphics.newMesh(vertexFormat, verts, "triangles")
   self.position = position
+  self.rotation = Vector3.zero()
+  self.scale = Vector3.one()
   self.shader = shader
   return self
 end
@@ -69,8 +72,8 @@ function Cube:draw()
   love.graphics.push("all")
   local modelMatrix = Matrix.transformMatrix(
     self.position,
-    Vector3.zero(),
-    Vector3.one()
+    self.rotation,
+    self.scale
   )
   self.shader:send("modelMatrix", modelMatrix)
   modelMatrix:release()

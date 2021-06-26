@@ -176,6 +176,10 @@ function Matrix.viewMatrix(eye, target, down)
   result[11] = zt.z
   result[12] = -1 * Vector3.dot(zt, eye)
 
+  zt:release()
+  xt:release()
+  yt:release()
+
   return result
 end
 

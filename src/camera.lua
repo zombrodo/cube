@@ -45,7 +45,7 @@ function Camera:lookAt(from, at)
   self.direction = math.pi / 2 - math.atan2(lookVector.z, lookVector.x)
   self.pitch = -math.atan2(lookVector.y,
   math.sqrt(lookVector.x * lookVector.x + lookVector.z * lookVector.z))
-
+  lookVector:release()
   self:updateViewMatrix()
 end
 
