@@ -8,7 +8,7 @@ local vertexFormat = {
   {"VertexPosition", "float", 3},
   {"VertexTexCoord", "float", 2},
   {"VertexColor", "byte", 4},
-  {"VertexNormal", "float", 4}
+  {"VertexNormal", "float", 3}
 }
 
 local verts = {
@@ -77,7 +77,8 @@ function Cube:draw()
   )
   self.shader:send("modelMatrix", modelMatrix)
   modelMatrix:release()
-  love.graphics.setShader(self.shader)
+
+  love.graphics.setShader(self.shader.shader)
   love.graphics.draw(self.mesh)
   love.graphics.pop()
 end

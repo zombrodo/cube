@@ -137,8 +137,12 @@ function Camera:updateMovement(dt)
   end
 end
 
+function Camera:reload()
+  self:updateProjectionMatrix()
+  self:updateViewMatrix()
+end
+
 function Camera:firstPersonLook(dx, dy)
-  love.mouse.setRelativeMode(true)
   local sensitivity = 1 / 200
   self.direction = self.direction + dx * sensitivity
   self.pitch = math.max(math.min(self.pitch - dy * sensitivity, math.pi * 0.5), math.pi * -0.5)
