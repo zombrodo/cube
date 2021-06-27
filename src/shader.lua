@@ -1,7 +1,6 @@
 local Shader = {}
 Shader.__index = Shader
 
-
 local function lastModified(filePath)
   local info = love.filesystem.getInfo(filePath, "file")
   return info.modtime
