@@ -7,8 +7,9 @@ local camera
 local cube
 local shader
 local focused
+local timer = 0
 
-local lightPosition = Vector3.fromPool(1.2, 1, 2)
+local lightPosition = Vector3.fromPool(2.4, 2, 4)
 
 function love.load()
   love.graphics.setDepthMode("lequal", true)
@@ -24,9 +25,11 @@ function love.load()
 end
 
 function love.update(dt)
+  timer = timer + dt
   camera:updateMovement(dt)
-  lightPosition:set(camera.position.x, camera.position.y, camera.position.z)
+  lightPosition:set(math.cos(timer) * 2, 0, math.sin(timer) * 2)
   shader:send("lightPosition", { lightPosition:unpack() })
+  shader:send("viewPosition", { camera.position:unpack() })
   local updated = shader:update(dt)
   if updated then
     camera:reload()
