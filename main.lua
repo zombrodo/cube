@@ -2,6 +2,8 @@ local Cube = require "src.primitives.cube"
 local Camera = require "src.camera"
 local Vector3 = require "lib.vector3"
 local Shader = require "src.shader"
+local Loader = require "src.loader"
+local Model = require "src.primitives.model"
 
 local camera
 local cube
@@ -9,16 +11,16 @@ local shader
 local focused
 local timer = 0
 
-local lightPosition = Vector3.fromPool(2.4, 2, 4)
-
 function love.load()
   love.graphics.setDepthMode("lequal", true)
-  shader = Shader.new("assets/pixel.glsl", "assets/vert.glsl")
-  shader:send("lightPosition", { lightPosition:unpack() })
+  shader = Shader.new("assets/shaders/pixel.glsl", "assets/shaders/vert.glsl")
   camera = Camera.new(shader)
-  cube = Cube.new(Vector3.new(0, 0, 4), shader)
-  camera.position = Vector3.new(0, 0, 0)
-  camera.target = Vector3.new(0, 0, 1)
+
+  local cubeData = Loader.loadObj("assets/models/cube.obj")
+  cube = Model.new(cubeData, Vector3.fromPool(0, 0, 4), shader)
+
+  camera.position = Vector3.fromPool(0, 0, 0)
+  camera.target = Vector3.fromPool(0, 0, 1)
 
   camera:updateProjectionMatrix()
   camera:updateViewMatrix()
@@ -27,9 +29,9 @@ end
 function love.update(dt)
   timer = timer + dt
   camera:updateMovement(dt)
-  lightPosition:set(math.cos(timer) * 2, 0, math.sin(timer) * 2)
-  shader:send("lightPosition", { lightPosition:unpack() })
+  shader:send("lightPosition", { camera.position:unpack() })
   shader:send("viewPosition", { camera.position:unpack() })
+
   local updated = shader:update(dt)
   if updated then
     camera:reload()

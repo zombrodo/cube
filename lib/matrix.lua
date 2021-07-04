@@ -155,6 +155,22 @@ function Matrix.projectionMatrix(fov, near, far, aspectRatio)
   return result
 end
 
+function Matrix.orthographicMatrix(left, right, bottom, top, near, far)
+  local result = Matrix.fromPool()
+  local tx = -(right + left) / (right - left)
+  local ty = -(top + bottom) / (top - bottom)
+  local tz = -(far + near) / (far - near)
+
+  result[1] = 2 / (right - left)
+  result[6] = 2 / (top - bottom)
+  result[11] = -2 / (far - near)
+  result[4] = tx
+  result[8] = ty
+  result[12] = tz
+
+  return result
+end
+
 function Matrix.viewMatrix(eye, target, down)
   local result = Matrix.fromPool()
   local zt = Vector3.normalised(eye - target)
